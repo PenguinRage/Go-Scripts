@@ -26,7 +26,7 @@ func ServerClient() {
 		panic(err)
 	}
 
-	val, err := rdb.Get(ctx, "hello").Result()
+	val, err := rdb.Get(ctx, "up_token").Result()
 	if err != nil {
 		panic(err)
 	}
