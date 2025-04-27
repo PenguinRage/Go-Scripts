@@ -1,3 +1,3 @@
-module penguinrage.io/asx-purchase-tracker
+module stock-purchase-tracker
 
 go 1.24.2
