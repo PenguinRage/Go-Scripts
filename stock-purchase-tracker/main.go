@@ -18,14 +18,16 @@ type Stock struct {
 
 func validateValues(arr []string) bool {
 	check := true
-
 	check = utils.IsValidExchange(arr[0])
+	check = utils.IsValidStock(arr[1])
+	check = utils.IsValidState(arr[2])
+	check = utils.IsValidState(arr[4])
 
 	if check == false {
 		return false
 	}
 
-	return true
+	return check
 }
 
 // buildStock function  
