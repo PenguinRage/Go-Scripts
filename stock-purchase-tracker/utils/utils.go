@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"regexp"
 	"unicode"
 	"unicode/utf8"
 )
@@ -29,7 +30,7 @@ func IsValidLength(s string, minLength int, maxLength int) bool {
 }
 
 func IsValidExchange(s string) bool {
-	return IsAllCaps(s) && IsValidLength(s, 2, 4)
+	return IsAllCaps(s) && IsValidLength(s, 3, 6)
 }
 
 func IsValidState(s string) bool {
@@ -39,12 +40,16 @@ func IsValidState(s string) bool {
 	return false
 }
 
-func IsValidStock(s string) bool {
-	for _, r := range s {
-		if !unicode.IsUpper(r) || r != '.' {
-			return false
-		}
+func IsValidCurrency(s string) bool {
+	if s == "AUD" || s == "USD" {
+		return true
 	}
-	return true
+	return false
 }
 
+func IsValidStockCodeBasic(code string) bool {
+	if len(code) < 1 || len(code) > 6 { // Increased max length to accommodate BRK.B
+		return false
+	}
+	return regexp.MustCompile(`^[A-Z]+\.?[A-Z]*$`).MatchString(code)
+}

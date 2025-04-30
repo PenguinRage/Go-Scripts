@@ -17,17 +17,24 @@ type Stock struct {
 }
 
 func validateValues(arr []string) bool {
-	check := true
-	check = utils.IsValidExchange(arr[0])
-	check = utils.IsValidStock(arr[1])
-	check = utils.IsValidState(arr[2])
-	check = utils.IsValidState(arr[4])
-
-	if check == false {
+	if !utils.IsValidExchange(arr[0]) {
+		fmt.Println("Invalid Exchange")
+		return false
+	}
+	if !utils.IsValidStockCodeBasic(arr[1]) {
+		fmt.Println("Invalid Stock")
+		return false
+	}
+	if !utils.IsValidState(arr[2]) {
+		fmt.Println("Invalid State")
 		return false
 	}
 
-	return check
+	if !utils.IsValidCurrency(arr[4]) {
+		fmt.Println("Invalid Currency")
+		return false
+	}
+	return true
 }
 
 // buildStock function  
