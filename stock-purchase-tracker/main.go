@@ -20,18 +20,20 @@ func validateValues(arr []string) bool {
 	if !utils.IsValidExchange(arr[0]) {
 		fmt.Println("Invalid Exchange")
 		return false
-	}
-	if !utils.IsValidStockCodeBasic(arr[1]) {
+	} else if !utils.IsValidStockCodeBasic(arr[1]) {
 		fmt.Println("Invalid Stock")
 		return false
-	}
-	if !utils.IsValidState(arr[2]) {
+	} else if !utils.IsValidState(arr[2]) {
 		fmt.Println("Invalid State")
 		return false
-	}
-
-	if !utils.IsValidCurrency(arr[4]) {
+	} else if !utils.IsValidQuantity(arr[3]) {
+		fmt.Println("Invalid Quantity")
+		return false
+	} else if !utils.IsValidCurrency(arr[4]) {
 		fmt.Println("Invalid Currency")
+		return false
+	} else if !utils.IsvalidPrice(arr[5]) {
+		fmt.Println("Invalid Price")
 		return false
 	}
 	return true

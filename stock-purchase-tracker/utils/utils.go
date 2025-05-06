@@ -2,6 +2,7 @@ package utils
 
 import (
 	"regexp"
+	"strconv"
 	"unicode"
 	"unicode/utf8"
 )
@@ -27,6 +28,16 @@ func IsValidLength(s string, minLength int, maxLength int) bool {
 	}
 
 	return true
+}
+
+func IsValidQuantity(str string) bool {
+	_, err := strconv.Atoi(str)
+	return err == nil
+}
+
+func IsvalidPrice(str string) bool {
+	_, err := strconv.ParseFloat(str, 64)
+	return err == nil
 }
 
 func IsValidExchange(s string) bool {

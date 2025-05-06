@@ -11,6 +11,7 @@ func TestValidateValues(t *testing.T) {
 		expected  bool
 	}{
 		{"Case 1: Valid intake", []string{"ASX", "ASX", "BUY", "1", "AUD", "1.00"}, true},
+		{"Case 2: Valid intake", []string{"NADAQ", "BRK.B", "BUY", "1000", "USD", "512.15"}, true},
 	}
 
 	for _, tt := range tests {
