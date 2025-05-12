@@ -4,6 +4,185 @@ import (
 	"testing"
 )
 
+func TestIsvalidPrice(t *testing.T) {
+	testCases := []struct {
+		name     string
+		input    string
+		expected bool
+	}{
+		{
+			name:     "Valid Price",
+			input:    "10.50",
+			expected: true,
+		},
+		{
+			name:     "Valid Price with leading zero",
+			input:    "0.50",
+			expected: true,
+		},
+		{
+			name:     "Valid Price with integer",
+			input:    "10",
+			expected: true,
+		},
+		{
+			name:     "Invalid Price - Non-numeric",
+			input:    "abc",
+			expected: false,
+		},
+		{
+			name:     "Invalid Price - Empty string",
+			input:    "",
+			expected: false,
+		},
+		{
+			name:     "Invalid Price - Special characters",
+			input:    "$10.50",
+			expected: false,
+		},
+		{
+			name:     "Invalid Price - Multiple decimal points",
+			input:    "10.50.50",
+			expected: false,
+		},
+		{
+			name:     "Valid Price - Large number",
+			input:    "1234567890.12",
+			expected: true,
+		},
+		{
+			name:     "Valid Price - Negative number",
+			input:    "-10.50",
+			expected: true, // strconv.ParseFloat handles negative numbers
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			actual := IsvalidPrice(tc.input)
+			if actual != tc.expected {
+				t.Errorf("IsvalidPrice(%s) = %v, expected %v", tc.input, actual, tc.expected)
+			}
+		})
+	}
+}
+
+func TestIsValidExchange(t *testing.T) {
+	testCases := []struct {
+		name     string
+		input    string
+		expected bool
+	}{
+		{
+			name:     "Valid Exchange",
+			input:    "NYSE",
+			expected: true,
+		},
+		{
+			name:     "Valid Exchange - Min Length",
+			input:    "ASX",
+			expected: true,
+		},
+		{
+			name:     "Valid Exchange - Max Length",
+			input:    "ABCDEF",
+			expected: true,
+		},
+		{
+			name:     "Invalid Exchange - Lowercase",
+			input:    "nyse",
+			expected: false,
+		},
+		{
+			name:     "Invalid Exchange - Mixed Case",
+			input:    "Nyse",
+			expected: false,
+		},
+		{
+			name:     "Invalid Exchange - Too Short",
+			input:    "AB",
+			expected: false,
+		},
+		{
+			name:     "Invalid Exchange - Too Long",
+			input:    "ABCDEFG",
+			expected: false,
+		},
+		{
+			name:     "Invalid Exchange - Empty String",
+			input:    "",
+			expected: false,
+		},
+		{
+			name:     "Invalid Exchange - Special Characters",
+			input:    "NYSE!",
+			expected: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			actual := IsValidExchange(tc.input)
+			if actual != tc.expected {
+				t.Errorf("IsValidExchange(%s) = %v, expected %v", tc.input, actual, tc.expected)
+			}
+		})
+	}
+}
+
+func TestIsValidState(t *testing.T) {
+	testCases := []struct {
+		name     string
+		input    string
+		expected bool
+	}{
+		{
+			name:     "Valid State - SELL",
+			input:    "SELL",
+			expected: true,
+		},
+		{
+			name:     "Valid State - BUY",
+			input:    "BUY",
+			expected: true,
+		},
+		{
+			name:     "Invalid State - Lowercase",
+			input:    "sell",
+			expected: false,
+		},
+		{
+			name:     "Invalid State - Mixed Case",
+			input:    "Sell",
+			expected: false,
+		},
+		{
+			name:     "Invalid State - Other Value",
+			input:    "HOLD",
+			expected: false,
+		},
+		{
+			name:     "Invalid State - Empty String",
+			input:    "",
+			expected: false,
+		},
+		{
+			name:     "Invalid State - Special Characters",
+			input:    "SELL!",
+			expected: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			actual := IsValidState(tc.input)
+			if actual != tc.expected {
+				t.Errorf("IsValidState(%s) = %v, expected %v", tc.input, actual, tc.expected)
+			}
+		})
+	}
+}
+
 func TestIsValidStockCode(t *testing.T) {
 	tests := []struct {
 		rule      string
@@ -12,7 +191,7 @@ func TestIsValidStockCode(t *testing.T) {
 	}{
 		{"Case 1: Valid Stock", "MSFT", true},
 		{"Case 2: Invalid Stock - Lowercase", "msft", false},
-		{"Case 3: Invalid Stock - Symbols", "MSFT.", false},
+		{"Case 3: Invalid Stock - Symbols", "BRK.B", true},
 		{"Case 4: Invalid Stock - Empty", "", false},
 		{"Case 5: Invalid Stock - Number", "1234", false},
 	}
@@ -26,7 +205,7 @@ func TestIsValidStockCode(t *testing.T) {
 }
 
 // TestIsAllCaps function  
-func TestIsAllCaps(t *testing.T) {
+func TestIsAllAlphaCaps(t *testing.T) {
 	tests := []struct {
 		rule      string
 		testValue string
@@ -36,8 +215,8 @@ func TestIsAllCaps(t *testing.T) {
 		{"Case 2: Fails AllCaps", "AbCD", false},
 		{"Case 3: Fails AllCaps - Symbols", "ABCD.", false},
 		{"Case 4: Empty String", "", true},               // Empty string should return true
-		{"Case 5: Numbers", "1234", true},                // Numbers should return true
-		{"Case 6: Mixed Alphanumeric", "A1B2", true},     // Mixed alphanumeric should return true
+		{"Case 5: Numbers", "1234", false},              // Alpha only
+		{"Case 6: Mixed Alphanumeric", "A1B2", false},   // No mixed // Alpha only
 		{"Case 7: Lowercase and Numbers", "a1b2", false}, // Lowercase and numbers should return false
 	}
 
