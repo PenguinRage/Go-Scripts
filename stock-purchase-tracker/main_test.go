@@ -7,11 +7,11 @@ import (
 func TestValidateValues(t *testing.T) {
 	tests := []struct {
 		rule      string
-		testValue []string
+		testValue *Stock
 		expected  bool
 	}{
-		{"Case 1: Valid intake", []string{"ASX", "ASX", "BUY", "1", "AUD", "1.00"}, true},
-		{"Case 2: Valid intake", []string{"NADAQ", "BRK.B", "BUY", "1000", "USD", "512.15"}, true},
+		{"Case 1: Valid intake", &Stock{"ASX", "ASX", "BUY", 1, "AUD", 1.00}, true},
+		{"Case 2: Valid intake", &Stock{"NADAQ", "BRK.B", "BUY", 1000, "USD", 512.15}, true},
 	}
 
 	for _, tt := range tests {

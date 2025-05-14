@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"stock-purchase-tracker/utils"
 )
 
@@ -16,38 +17,37 @@ type Stock struct {
 	Price    float64 `db:"price"`
 }
 
-func validateValues(arr []string) bool {
-	if !utils.IsValidExchange(arr[0]) {
+func validateValues(stock *Stock) bool {
+	if !utils.IsValidExchange(stock.Exchange) {
 		fmt.Println("Invalid Exchange")
 		return false
-	} else if !utils.IsValidStockCodeBasic(arr[1]) {
+	} else if !utils.IsValidStockCodeBasic(stock.Code) {
 		fmt.Println("Invalid Stock")
 		return false
-	} else if !utils.IsValidState(arr[2]) {
+	} else if !utils.IsValidState(stock.State) {
 		fmt.Println("Invalid State")
 		return false
-	} else if !utils.IsValidQuantity(arr[3]) {
-		fmt.Println("Invalid Quantity")
-		return false
-	} else if !utils.IsValidCurrency(arr[4]) {
+	} else if !utils.IsValidCurrency(stock.Currency) {
 		fmt.Println("Invalid Currency")
-		return false
-	} else if !utils.IsvalidPrice(arr[5]) {
-		fmt.Println("Invalid Price")
 		return false
 	}
 	return true
 }
 
 // buildStock function  
-func buildStock(exchange string, code string, state string, quantity int, curency string, price float64) *Stock {
-	stock := Stock{exchange, code, state, quantity, curency, price}
-	return &stock
+func buildStock(c *gin.Context) {
+	var newStock Stock
+
+	if err := c.BindJSON(&newStock); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Invalid Values"})
+		return
+	}
+
+	c.IndentedJSON(http.StatusCreated, newStock)
 }
 
 func main() {
-	args := os.Args[1:]
-	validated := validateValues(args)
-
-	fmt.Println(validated)
+	router := gin.Default()
+	router.POST("/stocks", buildStock)
+	router.Run("localhost:8080")
 }
