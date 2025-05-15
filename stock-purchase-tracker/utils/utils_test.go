@@ -67,6 +67,64 @@ func TestIsValidExchange(t *testing.T) {
 	}
 }
 
+func TestIsValidCurrency(t *testing.T) {
+	testCases := []struct {
+		name     string
+		input    string
+		expected bool
+	}{
+		{
+			name:     "Valid Currency - USD",
+			input:    "USD",
+			expected: true,
+		},
+		{
+			name:     "Valid Currency - AUD",
+			input:    "AUD",
+			expected: true,
+		},
+		{
+			name:     "Invalid Currency - Lowercase",
+			input:    "usd",
+			expected: false,
+		},
+		{
+			name:     "Invalid Currency - Too Short",
+			input:    "US",
+			expected: false,
+		},
+		{
+			name:     "Invalid Currency - Too Long",
+			input:    "USDD",
+			expected: false,
+		},
+		{
+			name:     "Invalid Currency - Mixed Case",
+			input:    "UsD",
+			expected: false,
+		},
+		{
+			name:     "Invalid Currency - Empty String",
+			input:    "",
+			expected: false,
+		},
+		{
+			name:     "Invalid Currency - Special Characters",
+			input:    "USD!",
+			expected: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			actual := IsValidCurrency(tc.input)
+			if actual != tc.expected {
+				t.Errorf("IsValidCurrency(%s) = %v, expected %v", tc.input, actual, tc.expected)
+			}
+		})
+	}
+}
+
 func TestIsValidState(t *testing.T) {
 	testCases := []struct {
 		name     string
