@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"stock-purchase-tracker/utils"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Stock struct {
@@ -39,7 +40,12 @@ func buildStock(c *gin.Context) {
 	var newStock Stock
 
 	if err := c.BindJSON(&newStock); err != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Invalid Values"})
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Unable to BindJSON"})
+		return
+	}
+
+	if !validateValues(&newStock) {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Failed Validation Checks"})
 		return
 	}
 
