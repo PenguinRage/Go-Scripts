@@ -4,21 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
+	"stock-purchase-tracker/datatypes"
 	"stock-purchase-tracker/utils"
 
 	"github.com/gin-gonic/gin"
 )
 
-type Stock struct {
-	Exchange string  `db:"exchange"`
-	Code     string  `db:"code"`
-	State    string  `db:"state"`
-	Quantity int     `db:"quantity"`
-	Currency string  `db:"currency"`
-	Price    float64 `db:"price"`
-}
-
-func validateValues(stock *Stock) bool {
+func validateValues(stock *datatypes.Stock) bool {
 	if !utils.IsValidExchange(stock.Exchange) {
 		fmt.Println("Invalid Exchange")
 		return false
@@ -37,7 +29,7 @@ func validateValues(stock *Stock) bool {
 
 // buildStock function  
 func buildStock(c *gin.Context) {
-	var newStock Stock
+	var newStock datatypes.Stock
 
 	if err := c.BindJSON(&newStock); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Unable to BindJSON"})
