@@ -20,3 +20,21 @@ func InsertStock(stock *datatypes.Stock) {
 	db.Close()
 
 }
+
+func GetStocks() []datatypes.Stock {
+	db, err := sqlx.Connect("postgres", "user=stockuser password=stockpass dbname=stocks host=localhost port=5432 sslmode=disable")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	defer db.Close()
+
+	var stocks []datatypes.Stock
+	err = db.Select(&stocks, "SELECT exchange, code, state, quantity, currency, price FROM stocks")
+	if err != nil {
+		log.Printf("Error fetching stocks: %v", err)
+		return []datatypes.Stock{}
+	}
+
+	return stocks
+}

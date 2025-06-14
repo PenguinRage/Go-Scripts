@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"stock-purchase-tracker/datatypes"
+	"stock-purchase-tracker/db"
 	"stock-purchase-tracker/utils"
 
 	"github.com/gin-gonic/gin"
@@ -44,8 +45,15 @@ func buildStock(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, newStock)
 }
 
+// getStocks function
+func getStocks(c *gin.Context) {
+	stocks := db.GetStocks()
+	c.IndentedJSON(http.StatusOK, stocks)
+}
+
 func main() {
 	router := gin.Default()
+	router.GET("/stocks", getStocks)
 	router.POST("/stocks", buildStock)
 	router.Run("localhost:8080")
 }
