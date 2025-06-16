@@ -5,6 +5,7 @@ import (
 	"stock-purchase-tracker/datatypes"
 
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 func InsertStock(stock *datatypes.Stock) {
